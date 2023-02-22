@@ -27,10 +27,6 @@ def cached_files():
     return cache
 
 
-cache_files = cached_files()
-print(cache_files)
-
-
 def find_password(cache):
     directory = r'C:/Users/lonni/OneDrive/Documents/Winc/files/cache'
     for file in os.scandir(directory):
@@ -41,6 +37,3 @@ def find_password(cache):
         else:
             print('password not found')
     return f, find_password
-
-
-print(find_password)
