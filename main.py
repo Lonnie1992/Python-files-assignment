@@ -5,17 +5,23 @@ import os
 import shutil
 import zipfile
 
-path = r'C:/Users/lonni/OneDrive/Documents/Winc/files/cache'
-if os.path.exists(path):
-    shutil.rmtree(path)
-else:
-    os.mkdir(path)
+def clean_cache():
+    path = os.getcwd()
+    cache = os.path.join(path, r'files/cache')
+    for file_name in os.listdir(cache):
+        file = cache + file_name
+        if os.path.isfile(file):
+            os.remove(file)
+            shutil.rmtree(os.path.join(path, r'files/cache'))
+        else:
+            os.mkdir(os.path.join(path, r'files/cache'))
+            return clean_cache
 
 
 def cache_zip(zip_file, cache_dir_path):
     with zipfile.ZipFile(zip_file, 'r') as zipref:
         zipref.extractall(cache_dir_path)
-        return
+        return cache_zip
 
 
 cache_zip(r'C:/Users/lonni/OneDrive/Documents/Winc/files/data.zip', 'C:/Users/lonni/OneDrive/Documents/Winc/files/cache')
