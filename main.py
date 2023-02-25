@@ -5,41 +5,63 @@ import os
 import shutil
 import zipfile
 
+# declaring paths that will work on any computer
+path = os.getcwd()
+cache = os.path.join(path, r'cache')
+data_zip = os.path.join(path, r'files/data.zip')
+
+
 def clean_cache():
-    path = os.getcwd()
-    cache = os.path.join(path, r'files/cache')
-    for file_name in os.listdir(cache):
-        file = cache + file_name
-        if os.path.isfile(file):
-            os.remove(file)
-            shutil.rmtree(os.path.join(path, r'files/cache'))
-        else:
-            os.mkdir(os.path.join(path, r'files/cache'))
-            return clean_cache
+    """
+    checks ik directory 'cache' exits, and removes it. Finally it creates an empty 'cache' directory
+    """
+    if os.path.exists(cache):
+        shutil.rmtree(cache)
+    else:
+        os.mkdir(os.path.join(cache))
 
 
 def cache_zip(zip_file, cache_dir_path):
+    """
+    unpacks the zip file into specified directory
+    """
     with zipfile.ZipFile(zip_file, 'r') as zipref:
         zipref.extractall(cache_dir_path)
-        return cache_zip
 
 
-cache_zip(r'C:/Users/lonni/OneDrive/Documents/Winc/files/data.zip', 'C:/Users/lonni/OneDrive/Documents/Winc/files/cache')
+cache_zip(data_zip, cache)
 
 
 def cached_files():
-    cache = os.path.abspath(r'C:/Users/lonni/OneDrive/Documents/Winc/files/cache')
-    os.listdir(r'C:/Users/lonni/OneDrive/Documents/Winc/files/cache')
-    return cache
+    """
+    This function creates a list of all files in the 'cache' directory
+    """
+    list = []
+    for file in os.listdir(cache):
+        list = os.path.join(file, cache)
+    return list
 
 
 def find_password(cache):
-    directory = r'C:/Users/lonni/OneDrive/Documents/Winc/files/cache'
+    """
+    From the list of files find the file(s) that containts 'password'
+    Find the specific word 'password'
+    Separate password from rest of file and print it
+    """
+    directory = cache
     for file in os.scandir(directory):
         password = str.find('password')
         if password in file:
             f = open(file, 'r')
-            print('found password')
+            pass_word = file[password + 1:]
+            print(pass_word)
         else:
-            print('password not found')
+            pass
     return f, find_password
+
+
+if __name__ == "main":
+    clean_cache
+    cache_zip
+    cached_files
+    find_password
