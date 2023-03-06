@@ -7,13 +7,14 @@ import zipfile
 
 # declaring paths that will work on any computer
 path = os.getcwd()
-cache = os.path.join(path, r'cache')
-data_zip = os.path.join(path, r'files/data.zip')
+cache = os.path.join(path, 'cache')
+data_zip = os.path.join(path, 'data.zip')
 
 
 def clean_cache():
     """
-    checks ik directory 'cache' exits, and removes it. Finally it creates an empty 'cache' directory
+    checks ik directory 'cache' exits, and removes it.
+    Finally it creates an empty 'cache' directory
     """
     if os.path.exists(cache):
         shutil.rmtree(cache)
@@ -29,9 +30,6 @@ def cache_zip(zip_file, cache_dir_path):
         zipref.extractall(cache_dir_path)
 
 
-cache_zip(data_zip, cache)
-
-
 def cached_files():
     """
     This function creates a list of all files in the 'cache' directory
@@ -39,6 +37,7 @@ def cached_files():
     list = []
     for file in os.listdir(cache):
         list = os.path.join(file, cache)
+        list.append(list.file)
     return list
 
 
@@ -51,17 +50,15 @@ def find_password(cache):
     directory = cache
     for file in os.scandir(directory):
         password = str.find('password')
-        if password in file:
-            f = open(file, 'r')
-            pass_word = file[password + 1:]
-            print(pass_word)
+        if password in file.name:
+            f = open(file.path, 'r')
         else:
             pass
-    return f, find_password
+    return f
 
 
 if __name__ == "main":
-    clean_cache
-    cache_zip
-    cached_files
-    find_password
+    clean_cache()
+    cache_zip()
+    cached_files()
+    find_password()
