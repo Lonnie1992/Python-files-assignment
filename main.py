@@ -16,10 +16,11 @@ def clean_cache():
     checks ik directory 'cache' exits, and removes it.
     Finally it creates an empty 'cache' directory
     """
-    if os.path.exists(cache):
-        shutil.rmtree(cache)
+    if not os.path.exists(cache):
+        os.mkdir(cache)
     else:
-        os.mkdir(os.path.join(cache))
+        shutil.rmtree(cache)
+        os.mkdir(cache)
 
 
 def cache_zip(zip_file, cache_dir_path):
@@ -36,29 +37,33 @@ def cached_files():
     """
     list = []
     for file in os.listdir(cache):
-        list = os.path.join(file, cache)
-        list.append(list.file)
+        list.append(file)
     return list
 
 
-def find_password(cache):
+print(cached_files())
+
+
+def find_password(cached_files):
     """
     From the list of files find the file(s) that containts 'password'
     Find the specific word 'password'
     Separate password from rest of file and print it
     """
     directory = cache
+    password = 'password'
     for file in os.scandir(directory):
-        password = str.find('password')
-        if password in file.name:
-            f = open(file.path, 'r')
-        else:
-            pass
-    return f
+        open(file.path, 'r')
+        for line in file:
+            if password in line:
+                result = line.split(':')
+                return result[1]
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     clean_cache()
-    cache_zip()
+    cache_zip(data_zip, cache)
     cached_files()
-    find_password()
+    find_password(cached_files)
+# Run this in the 'files' directory
+print('Test Run')
