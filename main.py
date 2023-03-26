@@ -7,8 +7,8 @@ import zipfile
 
 # declaring paths that will work on any computer
 path = os.getcwd()
-cache = os.path.join(path, 'cache')
-data_zip = os.path.join(path, 'data.zip')
+cache = os.path.join(path, 'files', 'cache')
+data_zip = os.path.join(path, 'files', 'data.zip')
 
 
 def clean_cache():
@@ -37,33 +37,30 @@ def cached_files():
     """
     list = []
     for file in os.listdir(cache):
-        list.append(file)
+        list.append(cache + file)
     return list
-
-
-print(cached_files())
 
 
 def find_password(cached_files):
     """
     From the list of files find the file(s) that containts 'password'
     Find the specific word 'password'
-    Separate password from rest of file and print it
+    Separate password from rest of file
     """
-    directory = cache
     password = 'password'
-    for file in os.scandir(directory):
-        open(file.path, 'r')
-        for line in file:
-            if password in line:
-                result = line.split(':')
-                return result[1]
+    for file in os.listdir(os.chdir(cache)):
+        if file.endswith('.txt'):
+            file_path = f'{file}'
+            with open(file_path) as file:
+                lines = file.readlines()
+                for line in lines:
+                    if password in line:
+                        password = line.split(': ')
+                        return password[1]
 
 
 if __name__ == "__main__":
     clean_cache()
     cache_zip(data_zip, cache)
     cached_files()
-    find_password(cached_files)
-# Run this in the 'files' directory
-print('Test Run')
+    print(find_password(cached_files))
