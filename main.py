@@ -37,10 +37,10 @@ def cached_files():
     """
     list = []
     for file in os.listdir(cache):
-        list.append(cache + file)
+        list.append(os.path.join(cache, file))
     return list
 
-
+ 
 def find_password(cached_files):
     """
     From the list of files find the file(s) that containts 'password'
@@ -48,19 +48,18 @@ def find_password(cached_files):
     Separate password from rest of file
     """
     password = 'password'
-    for file in os.listdir(os.chdir(cache)):
-        if file.endswith('.txt'):
-            file_path = f'{file}'
-            with open(file_path) as file:
-                lines = file.readlines()
-                for line in lines:
-                    if password in line:
-                        password = line.split(': ')
-                        return password[1]
+    for file in cached_files:
+        with open(file) as file:
+            lines = file.readlines()
+            for line in lines:
+                if password in line:
+                    password = line.split(': ')
+                    return (password[1])[:-1]
 
 
 if __name__ == "__main__":
     clean_cache()
     cache_zip(data_zip, cache)
     cached_files()
-    print(find_password(cached_files))
+    print(find_password(cached_files()))
+    
